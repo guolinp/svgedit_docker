@@ -8,7 +8,6 @@ ENV CATALINA_TMPDIR /usr/local/tomcat/temp
 ENV JRE_HOME /usr
 ENV CLASSPATH /usr/local/tomcat/bin/bootstrap.jar:/usr/local/tomcat/bin/tomcat-juli.jar
 
-
 RUN rm -rf /usr/local/tomcat/webapps/* && \
     mkdir -p /usr/local/tomcat/webapps/ROOT
 
@@ -19,8 +18,8 @@ RUN tar -zxvf /svgedit.tar.gz && \
 
 # disable all file logging
 ADD logging.properties /usr/local/tomcat/conf/logging.properties
+ADD index.html /usr/local/tomcat/webapps/ROOT/index.html
 RUN sed -i -e 's/Valve/Disabled/' /usr/local/tomcat/conf/server.xml
-RUN echo '<iframe src="svgedit/editor/svg-editor.html?extensions=" width="100%" height="96%"></iframe>' > /usr/local/tomcat/webapps/ROOT/index.html
 
 # add our scripts
 ADD scripts /scripts
