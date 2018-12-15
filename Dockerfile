@@ -20,7 +20,7 @@ RUN tar -zxvf /svgedit.tar.gz && \
 # disable all file logging
 ADD logging.properties /usr/local/tomcat/conf/logging.properties
 RUN sed -i -e 's/Valve/Disabled/' /usr/local/tomcat/conf/server.xml
-RUN sed -i -e 's!index.html!svgedit/editor/svg-editor.html!' /usr/local/tomcat/conf/web.xml
+RUN echo '<iframe src="svgedit/editor/svg-editor.html?extensions=" width="100%" height="96%"></iframe>' > /usr/local/tomcat/webapps/ROOT/index.html
 
 # add our scripts
 ADD scripts /scripts
