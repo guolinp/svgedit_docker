@@ -9,15 +9,18 @@ ENV JRE_HOME /usr
 ENV CLASSPATH /usr/local/tomcat/bin/bootstrap.jar:/usr/local/tomcat/bin/tomcat-juli.jar
 
 
-ADD https://github.com/SVG-Edit/svgedit/archive/v4.2.0.tar.gz /svgedit.tar.gz
-RUN tar -zxvf /svgedit.tar.gz && mv svgedit-* /svgedit && rm -rf svgedit.tar.gz
 RUN rm -rf /usr/local/tomcat/webapps/* && \
-    mkdir -p /usr/local/tomcat/webapps/ROOT && \
-    ln -s /svgedit/editor/svg-editor.html /usr/local/tomcat/webapps/ROOT/index.html
+    mkdir -p /usr/local/tomcat/webapps/ROOT
+
+ADD https://github.com/SVG-Edit/svgedit/archive/v4.2.0.tar.gz /svgedit.tar.gz
+RUN tar -zxvf /svgedit.tar.gz && \
+    rm -rf /svgedit.tar.gz && \
+    mv svgedit-* /usr/local/tomcat/webapps/ROOT/svgedit
 
 # disable all file logging
 ADD logging.properties /usr/local/tomcat/conf/logging.properties
 RUN sed -i -e 's/Valve/Disabled/' /usr/local/tomcat/conf/server.xml
+RUN sed -i -e 's!index.html!svgedit/editor/svg-editor.html!' /usr/local/tomcat/conf/web.xml
 
 # add our scripts
 ADD scripts /scripts
